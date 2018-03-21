@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("div").focusin(function(){
+        $(this).css("background-color", "#FFFFCC");
+    });
+    $("div").focusout(function(){
+        $(this).css("background-color", "#FFFFFF");
+    });
+    $(".test").click(function(){
+        $(this).css("background-color", "#FFFFCC");
+        //$(this).css("display", "none");
+        var x = document.getElementById("test");
+        //var x = document.getElementsByClassName("test");
+       
+        x.innerHTML = "";
+        //var x = document.getElementById("myAnchor");
+    	//x.innerHTML = "W3Schools";
+        // console.log(z);
+        //x.innerHTML
+    });
+    $(".test").focusout(function(){
+        var data = $(this).text();
+        console.log(data);
+    });
+    
+});
+</script>
+</head>
+<body>
+<table border="1" style="padding: 1rem;">
+<tr>
+<td>00</td>
+<td class="test" id="test" contenteditable="true">x</td>
+<td>00</td>
+</tr>
+</table>
+<div style="border: 1px solid black;padding:10px;">
+  First name: <input type="text"><br>
+  Last name: <input type="text">
+</div>
+
+<p>Click an input field to get focus. Click outside an input field to lose focus.</p>
+
+</body>
+</html>
