@@ -1,7 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+  td{padding:1rem;}
+  </style>
 <script>
 $(document).ready(function(){
     $("div").focusin(function(){
@@ -11,6 +19,7 @@ $(document).ready(function(){
         $(this).css("background-color", "#FFFFFF");
     });
     $(".test").click(function(){
+    $("#test1").text("");
         $(this).css("background-color", "#FFFFCC");
         //$(this).css("display", "none");
         var x = document.getElementById("test");
@@ -24,6 +33,7 @@ $(document).ready(function(){
     });
     $(".test").focusout(function(){
         var data = $(this).text();
+        $("#test1").text(data);
         console.log(data);
     });
     
@@ -38,6 +48,7 @@ $(document).ready(function(){
 <td>00</td>
 </tr>
 </table>
+<div id="test1"></div>
 <div style="border: 1px solid black;padding:10px;">
   First name: <input type="text"><br>
   Last name: <input type="text">
