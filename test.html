@@ -1,60 +1,168 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <style>
-  td{padding:1rem;}
-  </style>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style type="text/css">
+      .table-responsive{
+            max-width: 320px;
+            text-align: center;
+      }
+    </style>
+
+    <title>Bingo Card Manager</title>
+    <script>
+        function add_table(insert_into,tbody_class_name) {
+          var new_table = "<table class=\"table table-bordered\"><thead class=\"thead-dark\"><tr><th scope=\"col\">B</th><th scope=\"col\">I</th><th scope=\"col\">N</th><th scope=\"col\">G</th><th scope=\"col\">O</th></tr></thead><tbody class=\""+tbody_class_name+"\"></tbody></table>"; 
+          $(insert_into).after(new_table);
+        }
+      </script>
+  </head>
+  <body>
+    <center>
+
+      <div class="table-responsive">
+        <p class="tbl_marker">Mark Drawn Numbers Here</p>
+        <script>add_table(".tbl_marker","marker");</script>
+
+        <p class="tbl_pattern">Draw Winning Pattern Here <br/>(dont mark the Free/Bunos box)</p>
+        <script>add_table(".tbl_pattern","pattern");</script>
+
+        <p class="tbl_card">Bingo Card</p>
+        <script>add_table(".tbl_card","card");</script>
+      </div>
+
+    </center>
+    
 <script>
 $(document).ready(function(){
-    $("div").focusin(function(){
-        $(this).css("background-color", "#FFFFCC");
-    });
-    $("div").focusout(function(){
-        $(this).css("background-color", "#FFFFFF");
-    });
-    $(".test").click(function(){
-    $("#test1").text("");
-        $(this).css("background-color", "#FFFFCC");
-        //$(this).css("display", "none");
-        var x = document.getElementById("test");
-        //var x = document.getElementsByClassName("test");
-       
-        x.innerHTML = "";
-        //var x = document.getElementById("myAnchor");
-    	//x.innerHTML = "W3Schools";
-        // console.log(z);
-        //x.innerHTML
-    });
-    $(".test").focusout(function(){
-        var data = $(this).text();
-        $("#test1").text(data);
-        console.log(data);
-    });
+  var monitor_box = [];
+  var number_drawn = [];
+
+  function monitor_clicked_box(e,id){
     
+    $(e).click(function(){
+      $(this).toggleClass("bg-success");
+      var data = id;
+      // data = parseInt(data);
+      var check_data = monitor_box.indexOf(data);
+
+      if(check_data<0){
+        monitor_box.push(data);
+        console.log("Added "+data);
+      }else{
+        monitor_box.splice(check_data,1);
+        console.log("Removed "+data);
+      }
+
+      console.log("monitor_box = "+monitor_box); 
+
+    });
+  } // end of monitor_clicked_box(e,id);
+
+  function drawn_number(e,id){
+    
+    $(e).click(function(){
+      $(this).toggleClass("bg-success");
+      var data = id;
+      // data = parseInt(data);
+      var check_data = number_drawn.indexOf(data);
+
+      if(check_data<0){
+        number_drawn.push(data);
+        console.log("Added "+data);
+      }else{
+        number_drawn.splice(check_data,1);
+        console.log("Removed "+data);
+      }
+
+      console.log("number_drawn = "+number_drawn); 
+
+    });
+  } // end of drawn_number(e,id);
+  
+function insert_pattern_td(){
+  var start_row_count = 1;
+  var max_row_count = 5;
+  var start_col_count = 1;
+  var max_col_count = 5;
+  var num = 1;
+  for (var row_count = start_row_count; row_count <= max_row_count; row_count++){// number of rows
+
+    for (var col_count = start_col_count; col_count <= max_col_count; col_count++){
+      if(col_count===1){
+        $("tbody.pattern").append("<tr class=\"aof-rows-"+row_count+"\">");
+      }
+      $("tr.aof-rows-"+row_count+"").append("<td contenteditable=\"false\" class=\"slot_index_"+num+"\">X</td>");
+      monitor_clicked_box(".slot_index_"+num,num);
+        num++;
+    }
+
+
+  }
+}// end insert_pattern_td();
+insert_pattern_td();
+
+
+function insert_marker_td(){
+  var start_row_count = 1;
+  var max_row_count = 15;
+  var start_col_count = 1;
+  var max_col_count = 5;
+  for (var row_count = start_row_count; row_count <= max_row_count; row_count++){// number of rows
+
+    var nums = row_count;
+    for (var col_count = start_col_count; col_count <= max_col_count; col_count++){
+      if(col_count===1){
+        $("tbody.marker").append("<tr class=\"aof-row-"+row_count+"\">");
+      }
+      $("tr.aof-row-"+row_count+"").append("<td contenteditable=\"false\" class=\"mark_slot_index_"+nums+"\">"+nums+"</td>");
+      drawn_number(".mark_slot_index_"+nums,nums);
+        nums = nums+15;
+    }
+
+  }
+}insert_marker_td();
+
+ 
+  // for (var i=1; i<=5;i++){
+  //   var b = 1;
+  //   var num = b+i-1;
+  //   // console.log("for var i = "+i);
+  //   for (b; b<=5;b++){
+  //   // console.log("for b = "+b);
+  //     console.log(num);
+  //     if(b===1){
+  //       $("tbody.marker").append("<tr class=\"aof-row-"+i+"\">");
+  //     }
+  //     $("tr.aof-row-"+i+"").append("<td contenteditable=\"true\" class=\"aof-box-"+num+"\">"+num+"</td>");
+  //       num += 5;
+
+  //   }
+  // }
+
+  // for (var ii = 1; ii <= 25; ii++) {
+  //   var e = 1;
+  //   if(ii!==1){
+  //   e = ii + 15;}
+  //   console.log("ii = "+ii+" and e = "+e);
+  //   click_box(".aof-box-"+e);
+  // }
+
 });
 </script>
-</head>
-<body>
-<table border="1" style="padding: 1rem;">
-<tr>
-<td>00</td>
-<td class="test" id="test" contenteditable="true">x</td>
-<td>00</td>
-</tr>
-</table>
-<div id="test1"></div>
-<div style="border: 1px solid black;padding:10px;">
-  First name: <input type="text"><br>
-  Last name: <input type="text">
-</div>
 
-<p>Click an input field to get focus. Click outside an input field to lose focus.</p>
+ 
 
-</body>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
 </html>
